@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASQ Interactive Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  .interactive-widget {
+    width: 916px;
+    height: 356px;
+    background-color: #f4f7fa;
+    border: 2px solid #0B4F8C;
+    border-radius: 8px;
+    display: flex;
+    box-sizing: border-box;
+    padding: 16px;
+    gap: 20px;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+  }
+
+  .grid-container {
+    width: 35%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
+    gap: 10px;
+    height: 100%;
+  }
+
+  .grid-btn {
+    background-color: #0B4F8C;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: left;
+  }
+
+  .grid-btn:hover, .grid-btn.active {
+    background-color: #073866;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  }
+
+  .info-panel {
+    width: 65%;
+    background: linear-gradient(135deg, #ffffff 0%, #e9f2fb 100%);
+    border: 1px solid #c7dff4;
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 20px 24px;
+    box-sizing: border-box;
+    height: 100%;
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden; 
+    box-shadow: inset 0 2px 10px rgba(11, 79, 140, 0.04);
+  }
+
+  .info-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+  .info-panel::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .info-panel::-webkit-scrollbar-thumb {
+    background: #c7dff4;
+    border-radius: 4px;
+  }
+  .info-panel::-webkit-scrollbar-thumb:hover {
+    background: #0B4F8C;
+  }
+
+  .info-panel::before {
+    content: "";
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(11, 79, 140, 0.08) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .info-panel::after {
+    content: "";
+    position: absolute;
+    bottom: -50px;
+    left: -20px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(11, 79, 140, 0.06) 0%, rgba(255,255,255,0) 70%);
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .info-content {
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .category-desc {
+    font-size: 15px;
+    color: #0B4F8C;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 16px;
+    line-height: 1.4;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+    width: 100%;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #173654;
+    font-weight: 500;
+    overflow-wrap: break-word;
+  }
+
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    margin-right: 12px;
+    cursor: pointer;
+    accent-color: #0B4F8C;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+
+  .formula-box {
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px dashed #0B4F8C;
+    padding: 10px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .fraction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.2;
+  }
+
+  .fraction .numerator {
+    border-bottom: 1px solid #173654;
+    padding: 0 4px 2px 4px;
+  }
+
+  .fraction .denominator {
+    padding: 2px 4px 0 4px;
+  }
+
+  .placeholder-text {
+    text-align: center;
+    font-size: 16px;
+    color: #173654;
+    font-weight: 500;
+    margin-top: 110px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="interactive-widget">
+  <div class="grid-container">
+    <button class="grid-btn" data-index="0">Check age</button>
+    <button class="grid-btn" data-index="1">Review items</button>
+    <button class="grid-btn" data-index="2">Try / omit items</button>
+    <button class="grid-btn" data-index="3">ASQ Overall</button>
+    <button class="grid-btn" data-index="4">Consider context</button>
+  </div>
+
+  <div class="info-panel">
+    <div class="info-content" id="infoDisplay">
+      <div class="placeholder-text">Click a category on the left to view the checklist.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const checklistData = [
+    [
+      "Check the child’s age compared with the ASQ age range window.",
+      "Was child’s age calculated correctly and correct ASQ administered? Check using the ASQ calculator or using the app.",
+      "Was age adjusted for prematurity (<24mo)?"
+    ],
+    [
+      "Review NOT YET and omitted items.",
+      "Did child have time/materials needed to try the activities?",
+      "Is the item aligned to the family’s culture or parenting practices?"
+    ],
+    [
+      "If needed, offer time to try items and/or omit items.",
+      "Rescore areas if child demonstrates skills.",
+      "Adjust area total if items need to be omitted due to parenting practices/beliefs/customs.<br><div class='formula-box'><span>Adjusted score = score + </span><div class='fraction'><span class='numerator'>total score</span><span class='denominator'># items completed</span></div></div>"
+    ],
+    [
+      "Review and discuss ASQ Overall section.",
+      "What are the responses to the Overall section?",
+      "What are the parent concerns?",
+      "What is your clinical impression?"
+    ],
+    [
+      "Consider strengths, community and culture, and risk and protective factors:",
+      "Past history",
+      "Developmental history",
+      "Environmental factors (including family, social, significant life events)",
+      "Family history especially of developmental differences or difficulties at school",
+      "Family and cultural context",
+      "Parent concerns",
+      "Availability of resources"
+    ]
+  ];
+
+  const buttons = document.querySelectorAll('.grid-btn');
+  const displayArea = document.getElementById('infoDisplay');
+
+  buttons.forEach(button => {
+    button.addEventListener('click', function() {
+      buttons.forEach(btn => btn.classList.remove('active'));
+      
+      this.classList.add('active');
+      
+      const index = this.getAttribute('data-index');
+      const data = checklistData[index];
+      
+      // The first item is the description, the rest are checklist items
+      const description = data[0];
+      const items = data.slice(1);
+      
+      let htmlContent = `<p class="category-desc">${description}</p><ul class="checklist">`;
+      items.forEach((item, i) => {
+        const uniqueId = `chk-${index}-${i}`;
+        htmlContent += `
+          <li>
+            <input type="checkbox" id="${uniqueId}">
+            <label for="${uniqueId}">${item}</label>
+          </li>
+        `;
+      });
+      htmlContent += '</ul>';
+      
+      displayArea.style.animation = 'none';
+      displayArea.offsetHeight; 
+      displayArea.style.animation = null; 
+      
+      displayArea.innerHTML = htmlContent;
+    });
+  });
+</script>
+
+</body>
+</html>

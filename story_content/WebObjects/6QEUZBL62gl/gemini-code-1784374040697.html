@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Skills Grid</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  /* Container strictly sized to 912x240 */
+  .skills-widget {
+    width: 912px;
+    height: 240px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin: 20px auto; /* Centered with a little breathing room */
+  }
+
+  /* Left sidebar for navigation */
+  .skills-nav {
+    width: 280px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #e0e0e0;
+  }
+
+  .skill-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    text-align: left;
+    padding: 0 24px;
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #4a4a4a;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+    display: flex;
+    align-items: center;
+  }
+
+  .skill-btn:hover {
+    background-color: #f1f5f9;
+    color: #0B4F8C;
+  }
+
+  .skill-btn.active {
+    background-color: #ebf3fa;
+    color: #0B4F8C;
+    border-left: 4px solid #0B4F8C;
+  }
+
+  /* Right content area */
+  .skills-content-area {
+    flex: 1;
+    position: relative;
+    background-color: #0B4F8C;
+  }
+
+  .skill-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .skill-panel.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Image gradient overlay to make text readable */
+  .panel-overlay {
+    background: linear-gradient(to top, rgba(11, 79, 140, 0.95) 0%, rgba(11, 79, 140, 0.4) 100%);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Text content container */
+  .panel-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+    color: #ffffff;
+  }
+
+  .panel-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  }
+
+  .panel-desc {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.95;
+    max-width: 90%;
+  }
+
+  /* Background Images from Unsplash */
+  /* NEW Communication Image: Child holding a book */
+  #panel-communication { background-image: url('https://images.unsplash.com/photo-1604179129250-20e67a1b6c9d?auto=format&fit=crop&w=800&q=80'); }
+  #panel-gross-motor { background-image: url('https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=800&q=80'); }
+  #panel-fine-motor { background-image: url('https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=800&q=80'); }
+  #panel-problem-solving { background-image: url('https://images.unsplash.com/photo-1587691592099-24045742c181?auto=format&fit=crop&w=800&q=80'); }
+  #panel-personal-social { background-image: url('https://images.unsplash.com/photo-1519340333755-56e9c1d04579?auto=format&fit=crop&w=800&q=80'); }
+
+</style>
+</head>
+<body>
+
+<div class="skills-widget">
+  
+  <!-- Navigation Sidebar -->
+  <div class="skills-nav">
+    <button class="skill-btn active" onclick="showSkill('communication', this)">Communication</button>
+    <button class="skill-btn" onclick="showSkill('gross-motor', this)">Gross motor</button>
+    <button class="skill-btn" onclick="showSkill('fine-motor', this)">Fine motor</button>
+    <button class="skill-btn" onclick="showSkill('problem-solving', this)">Problem solving</button>
+    <button class="skill-btn" onclick="showSkill('personal-social', this)">Personal social</button>
+  </div>
+
+  <!-- Content Panels -->
+  <div class="skills-content-area">
+    
+    <div id="panel-communication" class="skill-panel active">
+      <div class="panel-overlay"></div>
+      <div class="panel-content">
+        <h2 class="panel-title">Communication</h2>
+        <p class="panel-desc">How children listen, talk, and how they let us know what they are thinking.</p>
+      </div>
+    </div>
+
+    <div id="panel-gross-motor" class="skill-panel">
+      <div class="panel-overlay"></div>
+      <div class="panel-content">
+        <h2 class="panel-title">Gross motor</h2>
+        <p class="panel-desc">How children use their arms and legs and move their body.</p>
+      </div>
+    </div>
+
+    <div id="panel-fine-motor" class="skill-panel">
+      <div class="panel-overlay"></div>
+      <div class="panel-content">
+        <h2 class="panel-title">Fine motor</h2>
+        <p class="panel-desc">How children use their hands and fingers to make things happen.</p>
+      </div>
+    </div>
+
+    <div id="panel-problem-solving" class="skill-panel">
+      <div class="panel-overlay"></div>
+      <div class="panel-content">
+        <h2 class="panel-title">Problem solving</h2>
+        <p class="panel-desc">How children think about things and work out problems.</p>
+      </div>
+    </div>
+
+    <div id="panel-personal-social" class="skill-panel">
+      <div class="panel-overlay"></div>
+      <div class="panel-content">
+        <h2 class="panel-title">Personal social</h2>
+        <p class="panel-desc">How children do things for themselves, understand who they are, and interact with others.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function showSkill(skillId, btnElement) {
+    // 1. Remove active class from all buttons
+    const buttons = document.querySelectorAll('.skill-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // 2. Add active class to clicked button
+    btnElement.classList.add('active');
+
+    // 3. Hide all panels
+    const panels = document.querySelectorAll('.skill-panel');
+    panels.forEach(panel => panel.classList.remove('active'));
+
+    // 4. Show the selected panel
+    const targetPanel = document.getElementById('panel-' + skillId);
+    if(targetPanel) {
+      targetPanel.classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>
